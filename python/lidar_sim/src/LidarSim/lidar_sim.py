@@ -18,14 +18,14 @@ class LidarSimulator():
         env.y = env.y - env.y.min()
         return env
 
-    def lidar_scann(self, x, y, yaw):
+    def lidar_scan(self, x, y, yaw):
         triangles = self.get_env_triangles(x, y, yaw)
         return self.lidar_filter(triangles)
 
     def get_lidar_points(self, x, y, yaw):
-        lidar_scann = self.lidar_scann(x, y, yaw)
-        plot_scann = np.stack((np.arange(0, 2 * np.pi, np.radians(self.resolution)), lidar_scann), axis=1)
-        return plot_scann[plot_scann[:, 1] != np.array(None)]
+        lidar_scan = self.lidar_scan(x, y, yaw)
+        plot_scan = np.stack((np.arange(0, 2 * np.pi, np.radians(self.resolution)), lidar_scan), axis=1)
+        return plot_scan[plot_scan[:, 1] != np.array(None)]
 
     def get_map_triangles(self):
         env = self.load_env
@@ -109,7 +109,7 @@ class LidarSimulator():
         return np.array(result)
 
     def lidar_filter(self, triangles):
-        scann = []
+        scan = []
         samples = np.arange(-np.pi, np.pi, np.radians(self.resolution))
         for sample in samples:
             # start with out of range
@@ -122,12 +122,12 @@ class LidarSimulator():
                 dist_t[1] = self._get_distance(t[0], t[2], sample)
                 dist_t[2] = self._get_distance(t[1], t[2], sample)
                 dist = min(dist_t.min(), dist)
-            scann.append(dist)
+            scan.append(dist)
             if dist > self.max_range:
-                scann[-1] = None
+                scan[-1] = None
             if dist < self.min_range:
-                scann[-1] = None
-        return np.roll(np.array(scann), int(np.pi / np.radians(self.resolution)))
+                scan[-1] = None
+        return np.roll(np.array(scan), int(np.pi / np.radians(self.resolution)))
 
 
 if __name__ == "__main__":
@@ -136,4 +136,4 @@ if __name__ == "__main__":
     import pdb
     pdb.set_trace()
     triangles = test_lidar.get_map_triangles()
-    print(test_lidar.lidar_scann(107, 189, 1.30899694))
+    print(test_lidar.lidar_scan(107, 189, 1.30899694))
