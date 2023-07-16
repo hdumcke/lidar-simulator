@@ -6,11 +6,12 @@ import copy
 
 class LidarSimulator():
 
-    def __init__(self, env_file, min_range=2.0, max_range=12000.0, resolution=1.):
+    def __init__(self, env_file, min_range=2.0, max_range=12000.0, resolution=1., error=0.0):
         self.min_range = min_range
         self.max_range = max_range
         self.resolution = resolution  # in degrees
         self.load_env = self.load_environment(env_file)
+        self.error = error
 
     def load_environment(self, env_file):
         env = mesh.Mesh.from_file(env_file)
@@ -20,12 +21,25 @@ class LidarSimulator():
 
     def lidar_scan(self, x, y, yaw):
         triangles = self.get_env_triangles(x, y, yaw)
-        return self.lidar_filter(triangles)
+        s = np.random.normal(1.0, self.error, int(360 / self.resolution))
+        return self.lidar_filter(triangles) * s
 
-    def get_lidar_points(self, x, y, yaw):
+    def get_lidar_points(self, x, y, yaw, theta=None, view_range=0):
         lidar_scan = self.lidar_scan(x, y, yaw)
         plot_scan = np.stack((np.arange(0, 2 * np.pi, np.radians(self.resolution)), lidar_scan), axis=1)
-        return plot_scan[plot_scan[:, 1] != np.array(None)]
+        plot_scan = plot_scan[plot_scan[:, 1] != np.array(None)]
+        if theta is None:
+            return plot_scan
+        else:
+            idx = np.searchsorted(plot_scan[:, 0], theta) - 1
+            idx_max = int(idx + view_range / self.resolution)
+            idx_min = int(idx - view_range / self.resolution)
+            if idx_max <= plot_scan.shape[0] and idx_min >= 0:
+                return plot_scan[idx_min:idx_max]
+            if idx_min < 0:
+                return np.roll(plot_scan, -idx_min, axis=0)[:2 * int(view_range / self.resolution)]
+            if idx_max > plot_scan.shape[0]:
+                return np.roll(plot_scan, -(idx_max - plot_scan.shape[0]), axis=0)[-2 * int(view_range / self.resolution):]
 
     def get_map_triangles(self):
         env = self.load_env

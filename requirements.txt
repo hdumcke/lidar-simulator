@@ -1,0 +1,6 @@
+sympy
+jupyter
+matplotlib
+numpy
+numpy-stl
+ipykernel
