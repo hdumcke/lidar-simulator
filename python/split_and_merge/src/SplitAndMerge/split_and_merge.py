@@ -47,7 +47,7 @@ class SplitAndMerge():
         x = np.array(x)
         y = np.array(y)
 
-        alpha_a, r_a, pointIdx_a = self.splitLinesRecursive(x, y, 0, x.shape[0])
+        alpha_a, r_a, pointIdx_a = self.splitLinesRecursive(x, y, 0, x.shape[0] -1)
 
         N = len(r_a)
         if N > 1:
@@ -76,10 +76,8 @@ class SplitAndMerge():
         return alpha_a, r_a, segend, seglen, pointIdx_a
 
     def splitLinesRecursive(self, x, y, startIdx, endIdx):
-        import pdb
-        pdb.set_trace()
-        N = endIdx - startIdx
-        alpha, r = self.fitLine(x[startIdx:endIdx], y[startIdx:endIdx])
+        N = endIdx - startIdx + 1
+        alpha, r = self.fitLine(x[startIdx:endIdx + 1], y[startIdx:endIdx + 1])
         alpha_a = [alpha]
         r_a = [r]
         idx_a = [[startIdx, endIdx]]
@@ -87,7 +85,7 @@ class SplitAndMerge():
             return alpha_a, r_a, idx_a
 
         # Find the splitting position (if there is)
-        splitPos = self.findSplitPos(x[startIdx:endIdx], y[startIdx:endIdx], alpha, r)
+        splitPos = self.findSplitPos(x[startIdx:endIdx + 1], y[startIdx:endIdx + 1], alpha, r)
 
         if splitPos != -1:
             alpha1, r1, idx1 = self.splitLinesRecursive(x, y, startIdx, splitPos + startIdx)
@@ -113,7 +111,7 @@ class SplitAndMerge():
         return xcosA + ysinA - r
 
     def findSplitPosInD(self, d):
-        N = d.shape[0] - 1
+        N = d.shape[0]
 
         farOnPositiveSideB = d > self.params['line_point_dist_threshold']
         farOnNegativeSideB = d < -self.params['line_point_dist_threshold']
@@ -150,9 +148,9 @@ class SplitAndMerge():
 
         for i in range(N - 1):
             endIdx = pointIdx_a[i + 1][1]
-            alpha, r = self.fitLine(x[startIdx:endIdx], y[startIdx:endIdx])
-            splitPos = self.findSplitPos(x[startIdx:endIdx], y[startIdx:endIdx], alpha, r)
-            print("%s %s %s %s %s" % (startIdx, endIdx, splitPos, alpha, r))
+            alpha, r = self.fitLine(x[startIdx:endIdx + 1], y[startIdx:endIdx + 1])
+            splitPos = self.findSplitPos(x[startIdx:endIdx + 1], y[startIdx:endIdx + 1], alpha, r)
+            #print("%s %s %s %s %s" % (startIdx, endIdx, splitPos, alpha, r))
             #import pdb
             #pdb.set_trace()
             if splitPos == -1:
