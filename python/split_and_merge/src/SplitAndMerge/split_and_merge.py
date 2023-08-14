@@ -47,7 +47,7 @@ class SplitAndMerge():
         x = np.array(x)
         y = np.array(y)
 
-        alpha_a, r_a, pointIdx_a = self.splitLinesRecursive(x, y, 0, x.shape[0] -1)
+        alpha_a, r_a, pointIdx_a = self.splitLinesRecursive(x, y, 0, x.shape[0] - 1)
 
         N = len(r_a)
         if N > 1:
@@ -150,9 +150,6 @@ class SplitAndMerge():
             endIdx = pointIdx_a[i + 1][1]
             alpha, r = self.fitLine(x[startIdx:endIdx + 1], y[startIdx:endIdx + 1])
             splitPos = self.findSplitPos(x[startIdx:endIdx + 1], y[startIdx:endIdx + 1], alpha, r)
-            #print("%s %s %s %s %s" % (startIdx, endIdx, splitPos, alpha, r))
-            #import pdb
-            #pdb.set_trace()
             if splitPos == -1:
                 z = [alpha, r]
             else:

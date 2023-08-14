@@ -1,6 +1,8 @@
 sympy
 jupyter
+jupyter-book
 matplotlib
+nbstripout
 numpy
 numpy-stl
 ipykernel
