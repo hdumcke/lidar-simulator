@@ -1,0 +1,86 @@
+solid b'STL Exported by Open CASCADE Technology [dev.opencascade.org]\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+facet normal -200.0 0.0 0.0
+  outer loop
+    vertex -15.0 -5.0 10.0
+    vertex -15.0 5.0 -10.0
+    vertex -15.0 -5.0 -10.0
+  endloop
+endfacet
+facet normal -200.0 0.0 0.0
+  outer loop
+    vertex -15.0 -5.0 10.0
+    vertex -15.0 5.0 10.0
+    vertex -15.0 5.0 -10.0
+  endloop
+endfacet
+facet normal 200.0 0.0 0.0
+  outer loop
+    vertex 15.0 -5.0 10.0
+    vertex 15.0 -5.0 -10.0
+    vertex 15.0 5.0 -10.0
+  endloop
+endfacet
+facet normal 200.0 -0.0 0.0
+  outer loop
+    vertex 15.0 -5.0 10.0
+    vertex 15.0 5.0 -10.0
+    vertex 15.0 5.0 10.0
+  endloop
+endfacet
+facet normal 0.0 -600.0 -0.0
+  outer loop
+    vertex 15.0 -5.0 10.0
+    vertex -15.0 -5.0 -10.0
+    vertex 15.0 -5.0 -10.0
+  endloop
+endfacet
+facet normal -0.0 -600.0 0.0
+  outer loop
+    vertex 15.0 -5.0 10.0
+    vertex -15.0 -5.0 10.0
+    vertex -15.0 -5.0 -10.0
+  endloop
+endfacet
+facet normal 0.0 600.0 0.0
+  outer loop
+    vertex 15.0 5.0 10.0
+    vertex 15.0 5.0 -10.0
+    vertex -15.0 5.0 -10.0
+  endloop
+endfacet
+facet normal 0.0 600.0 0.0
+  outer loop
+    vertex 15.0 5.0 10.0
+    vertex -15.0 5.0 -10.0
+    vertex -15.0 5.0 10.0
+  endloop
+endfacet
+facet normal -0.0 0.0 -300.0
+  outer loop
+    vertex 15.0 5.0 -10.0
+    vertex -15.0 -5.0 -10.0
+    vertex -15.0 5.0 -10.0
+  endloop
+endfacet
+facet normal 0.0 -0.0 -300.0
+  outer loop
+    vertex 15.0 5.0 -10.0
+    vertex 15.0 -5.0 -10.0
+    vertex -15.0 -5.0 -10.0
+  endloop
+endfacet
+facet normal 0.0 0.0 300.0
+  outer loop
+    vertex 15.0 5.0 10.0
+    vertex -15.0 5.0 10.0
+    vertex -15.0 -5.0 10.0
+  endloop
+endfacet
+facet normal 0.0 0.0 300.0
+  outer loop
+    vertex 15.0 5.0 10.0
+    vertex -15.0 -5.0 10.0
+    vertex 15.0 -5.0 10.0
+  endloop
+endfacet
+endsolid b'STL Exported by Open CASCADE Technology [dev.opencascade.org]\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'

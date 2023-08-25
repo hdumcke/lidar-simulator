@@ -163,7 +163,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="1-models.html">Creating 3D Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="1.1-rectangle.html">Square</a></li>
 <li class="toctree-l1"><a class="reference internal" href="1.2-racetrack.html">Race Track</a></li>
-<li class="toctree-l1"><a class="reference internal" href="1.3-box.html">Box</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.3-ascii_stl.html">Box</a></li>
 <li class="toctree-l1"><a class="reference internal" href="1.4-ascii_converter.html">Maze Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="1.99-show_models.html">Show All Models</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Simulating a Lidar</a></li>
@@ -379,7 +379,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-to-lidar-frame">Transform to Lidar Frame</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-to-polar-coordinate-system">Convert to polar coordinate system</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-closest-points">Filter closest points</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lines-in-poloar-coordinates">Lines in poloar coordinates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lines-in-polar-coordinates">Lines in polar coordinates</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#select-triangles-hit-by-ray">Select Triangles hit by Ray</a></li>
@@ -527,12 +527,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.patches.FancyArrow at 0x1140a6bd0&gt;
-</pre></div>
-</div>
-<img alt="_images/934cbeb1d32912ee2c76f505726affdc7e19b4a1c7245ff11e6a616096736049.png" src="_images/934cbeb1d32912ee2c76f505726affdc7e19b4a1c7245ff11e6a616096736049.png" />
-</div>
 </div>
 </section>
 <section id="transform-to-lidar-frame">
@@ -563,12 +557,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.patches.FancyArrow at 0x114323350&gt;
-</pre></div>
-</div>
-<img alt="_images/bc4b835afae0a5411cc4d2e95261ad8233e32debc840b49b42e335ed8dbbb32c.png" src="_images/bc4b835afae0a5411cc4d2e95261ad8233e32debc840b49b42e335ed8dbbb32c.png" />
 </div>
 </div>
 </section>
@@ -611,15 +599,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="_images/a79cb8dca7430fa3144a209b8f94b2c2fba9839f8856c2862888f7c6f6fa3290.png" src="_images/a79cb8dca7430fa3144a209b8f94b2c2fba9839f8856c2862888f7c6f6fa3290.png" />
-</div>
 </div>
 </section>
 <section id="filter-closest-points">
 <h2>Filter closest points<a class="headerlink" href="#filter-closest-points" title="Permalink to this heading">#</a></h2>
-<section id="lines-in-poloar-coordinates">
-<h3>Lines in poloar coordinates<a class="headerlink" href="#lines-in-poloar-coordinates" title="Permalink to this heading">#</a></h3>
+<section id="lines-in-polar-coordinates">
+<h3>Lines in polar coordinates<a class="headerlink" href="#lines-in-polar-coordinates" title="Permalink to this heading">#</a></h3>
 <p>A line in carthesian coordonate system is described as</p>
 <div class="math notranslate nohighlight">
 \[
@@ -670,10 +655,6 @@ P_2 = (\theta_2, r_2)
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_latex math notranslate nohighlight">
-\[\displaystyle - b - m r \cos{\left(\theta \right)} + r \sin{\left(\theta \right)}\]</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -688,10 +669,6 @@ P_2 = (\theta_2, r_2)
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p2</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">𝑟1</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_1</span><span class="p">))</span> <span class="o">-</span> <span class="n">m</span> <span class="o">*</span> <span class="n">r1</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_1</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_latex math notranslate nohighlight">
-\[\displaystyle - m r_{1} \cos{\left(\theta_{1} \right)} - m r_{2} \cos{\left(\theta_{2} \right)} - r_{1} \sin{\left(\theta_{1} \right)} + r_{2} \sin{\left(\theta_{2} \right)}\]</div>
 </div>
 </div>
 <div class="cell docutils container">
@@ -781,9 +758,6 @@ P_2 = (\theta_2, r_2)
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="_images/075a899545b1da170fd4a7239effdafb92af8b5e864910109c68758eee82a179.png" src="_images/075a899545b1da170fd4a7239effdafb92af8b5e864910109c68758eee82a179.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -816,12 +790,6 @@ P_2 = (\theta_2, r_2)
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">intersection_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">intersection_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x127a1d790&gt;
-</pre></div>
-</div>
-<img alt="_images/e55ec0aec52a95ed08cc4cc84870b024d75b0567967e0a96aca1ad913439e341.png" src="_images/e55ec0aec52a95ed08cc4cc84870b024d75b0567967e0a96aca1ad913439e341.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -880,12 +848,6 @@ P_2 = (\theta_2, r_2)
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Lidar Scann&#39;)
-</pre></div>
-</div>
-<img alt="_images/3da3878c8dd8cf7080880aad07138031cd70fb4bf561c7c7a3d2178b50762234.png" src="_images/3da3878c8dd8cf7080880aad07138031cd70fb4bf561c7c7a3d2178b50762234.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -919,12 +881,6 @@ P_2 = (\theta_2, r_2)
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Lidar Scann&#39;)
-</pre></div>
-</div>
-<img alt="_images/eebddaaddbe86701746d45f4a3655ff960d9cdcc35f2e5d782717325090e87e6.png" src="_images/eebddaaddbe86701746d45f4a3655ff960d9cdcc35f2e5d782717325090e87e6.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -951,12 +907,6 @@ P_2 = (\theta_2, r_2)
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Lidar Scann&#39;)
-</pre></div>
-</div>
-<img alt="_images/427e3a3c36535eb437af68c9dc81470289230e81bd49937093f9ec8cc14cd685.png" src="_images/427e3a3c36535eb437af68c9dc81470289230e81bd49937093f9ec8cc14cd685.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -982,12 +932,6 @@ P_2 = (\theta_2, r_2)
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Lidar Scann&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Lidar Scann&#39;)
-</pre></div>
-</div>
-<img alt="_images/1a0d5ab143cdbe3744f1125e9ea725801ac53c254985fc49eb2b32ea467bc0d6.png" src="_images/1a0d5ab143cdbe3744f1125e9ea725801ac53c254985fc49eb2b32ea467bc0d6.png" />
 </div>
 </div>
 </section>
@@ -1066,7 +1010,7 @@ P_2 = (\theta_2, r_2)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-to-lidar-frame">Transform to Lidar Frame</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-to-polar-coordinate-system">Convert to polar coordinate system</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-closest-points">Filter closest points</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lines-in-poloar-coordinates">Lines in poloar coordinates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lines-in-polar-coordinates">Lines in polar coordinates</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#select-triangles-hit-by-ray">Select Triangles hit by Ray</a></li>

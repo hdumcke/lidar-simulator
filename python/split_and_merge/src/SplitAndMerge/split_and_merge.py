@@ -56,7 +56,7 @@ class SplitAndMerge():
 
         # Compute endpoints/lengths of the segments
         segend = np.zeros((N, 4))
-        seglen = np.zeros((N, 1))
+        seglen = np.zeros((N))
         for i in range(N):
             segend[i, 0] = x[pointIdx_a[i][0]]
             segend[i, 1] = y[pointIdx_a[i][0]]
@@ -65,7 +65,7 @@ class SplitAndMerge():
             seglen[i] = np.sqrt((segend[i, 0] - segend[i, 2])**2 + (segend[i, 1] - segend[i, 3])**2)
 
         # Removing short segments
-        goodSegIdx = np.logical_and((seglen >= self.params['min_seg_length'])[:, 0],
+        goodSegIdx = np.logical_and((seglen >= self.params['min_seg_length']),
                                     (np.array(pointIdx_a)[:, 1] - np.array(pointIdx_a)[:, 0]) >= self.params['min_points_per_segment'])
         alpha_a = np.array(alpha_a)[goodSegIdx]
         r_a = np.array(r_a)[goodSegIdx]

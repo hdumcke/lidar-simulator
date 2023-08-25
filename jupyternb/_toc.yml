@@ -8,7 +8,7 @@ chapters:
 - file: 1-models
 - file: 1.1-rectangle
 - file: 1.2-racetrack
-- file: 1.3-box
+- file: 1.3-ascii_stl
 - file: 1.4-ascii_converter
 - file: 1.99-show_models
 - file: 2-lidar-scan

@@ -11,6 +11,7 @@ class LidarSimulator():
         self.max_range = max_range
         self.resolution = resolution  # in degrees
         self.load_env = self.load_environment(env_file)
+        self.obstacles = []
         self.error = error
 
     def load_environment(self, env_file):
@@ -42,7 +43,7 @@ class LidarSimulator():
                 return np.roll(plot_scan, -(idx_max - plot_scan.shape[0]), axis=0)[-2 * int(view_range / self.resolution):]
 
     def get_map_triangles(self):
-        env = self.load_env
+        env = self._load_env_with_obstacles()
         subset = env.vectors[(env.normals[:, 0] == 0.0) & (env.normals[:, 1] == 0.0) & (env.normals[:, 2] < 0.0)]
         triangles = []
         for t in subset[:, :, :]:
@@ -50,7 +51,7 @@ class LidarSimulator():
         return np.array(triangles)
 
     def get_env_triangles(self, x, y, yaw):
-        env = copy.deepcopy(self.load_env)
+        env = copy.deepcopy(self._load_env_with_obstacles())
         env.x = env.x - x
         env.y = env.y - y
         env.rotate([0.0, 0.0, 1.0], yaw)
@@ -88,13 +89,14 @@ class LidarSimulator():
         r_s_2 = np.sin(p2[0]) * p2[1]
         r_c_2 = np.cos(p2[0]) * p2[1]
         if (r_c_2 - r_c_1) == 0:
-            return self.max_range + 1.0
+            return r_c_1 / np.cos(theta_plus)
         m = (r_s_2 - r_s_1) / (r_c_2 - r_c_1)
         b = r_s_1 - m * r_c_1
         dist = b / (np.sin(theta_plus) - m * np.cos(theta_plus))
         return dist
 
     def _filter_triangles(self, triangles, theta):
+        np.any(triangles >= 0, axis=1)[:, 0] & np.any(triangles < 0, axis=1)[:, 0]
         special_cases = triangles[np.any(triangles >= 0, axis=1)[:, 0] & np.any(triangles < 0, axis=1)[:, 0]]
         other_cases = triangles[np.invert(np.any(triangles >= 0, axis=1)[:, 0] & np.any(triangles < 0, axis=1)[:, 0])]
         # verticies on both sides
@@ -126,6 +128,9 @@ class LidarSimulator():
         scan = []
         samples = np.arange(-np.pi, np.pi, np.radians(self.resolution))
         for sample in samples:
+            #if sample == samples[181]:
+            #    import pdb
+            #    pdb.set_trace()
             # start with out of range
             dist = self.max_range + 1.0
             # select all triangles hit by the ray
@@ -143,11 +148,68 @@ class LidarSimulator():
                 scan[-1] = None
         return np.roll(np.array(scan), int(np.pi / np.radians(self.resolution)))
 
+    def _load_env_with_obstacles(self):
+        env = self.load_env
+        for cube_mesh in self.obstacles:
+            env = mesh.Mesh(np.concatenate([
+                            env.data.copy(),
+                            cube_mesh.data.copy(),
+                            ]))
+        return env
+
+    def add_obstacle(self, x, y, theta, length, width):
+        # Create 6 faces of a cube
+        data = np.zeros(12, dtype=mesh.Mesh.dtype)
+        data['vectors'][0] = np.array([[-length / 2, -width / 2, 10.0],
+                                       [-length / 2, width / 2, -10.0],
+                                       [-length / 2, -width / 2, -10.0]])
+        data['vectors'][1] = np.array([[-length / 2, -width / 2, 10.0],
+                                       [-length / 2, width / 2, 10.0],
+                                       [-length / 2, width / 2, -10.0]])
+        data['vectors'][2] = np.array([[length / 2, -width / 2, 10.0],
+                                       [length / 2, -width / 2, -10.0],
+                                       [length / 2, width / 2, -10.0]])
+        data['vectors'][3] = np.array([[length / 2, -width / 2, 10.0],
+                                       [length / 2, width / 2, -10.0],
+                                       [length / 2, width / 2, 10.0]])
+        data['vectors'][4] = np.array([[length / 2, -width / 2, 10.0],
+                                       [-length / 2, -width / 2, -10.0],
+                                       [length / 2, -width / 2, -10.0]])
+        data['vectors'][5] = np.array([[length / 2, -width / 2, 10.0],
+                                       [-length / 2, -width / 2, 10.0],
+                                       [-length / 2, -width / 2, -10.0]])
+        data['vectors'][6] = np.array([[length / 2, width / 2, 10.0],
+                                       [length / 2, width / 2, -10.0],
+                                       [-length / 2, width / 2, -10.0]])
+        data['vectors'][7] = np.array([[length / 2, width / 2, 10.0],
+                                       [-length / 2, width / 2, -10.0],
+                                       [-length / 2, width / 2, 10.0]])
+        data['vectors'][8] = np.array([[length / 2, width / 2, -10.0],
+                                       [-length / 2, -width / 2, -10.0],
+                                       [-length / 2, width / 2, -10.0]])
+        data['vectors'][9] = np.array([[length / 2, width / 2, -10.0],
+                                       [length / 2, -width / 2, -10.0],
+                                       [-length / 2, -width / 2, -10.0]])
+        data['vectors'][10] = np.array([[length / 2, width / 2, 10.0],
+                                       [-length / 2, width / 2, 10.0],
+                                       [-length / 2, -width / 2, 10.0]])
+        data['vectors'][11] = np.array([[length / 2, width / 2, 10.0],
+                                       [-length / 2, -width / 2, 10.0],
+                                       [length / 2, -width / 2, 10.0]])
+
+        cube_mesh = mesh.Mesh(data, remove_empty_areas=False)
+
+        cube_mesh.rotate([0.0, 0.0, 1.0], theta)
+        cube_mesh.translate([x, y, 0.0])
+        self.obstacles.append(cube_mesh)
+
+    def delete_obstacles(self):
+        self.obstacles = []
+
 
 if __name__ == "__main__":
-    test_lidar = LidarSimulator("square.stl")
-    triangles = test_lidar.get_env_triangles(107, 189, 1.30899694)
-    import pdb
-    pdb.set_trace()
-    triangles = test_lidar.get_map_triangles()
-    print(test_lidar.lidar_scan(107, 189, 1.30899694))
+    test_lidar = LidarSimulator("robocup.stl")
+    #test_lidar.add_obstacle(150, 100, 0, 30, 30)
+    point = [100, 100]
+    yaw = np.radians(0)
+    plot_scan = test_lidar.get_lidar_points(point[0], point[1], yaw)
